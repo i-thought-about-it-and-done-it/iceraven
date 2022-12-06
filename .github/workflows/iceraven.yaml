@@ -10,7 +10,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build project
-        run: wget https://api.github.com/repos/fork-maintainers/iceraven-browser/releases/latest && grep -Prioh '(?<="browser_download_url".*).*?(?=")' | grep 'http.*$' | grep '.*arm64.*'
+        run: wget https://api.github.com/repos/fork-maintainers/iceraven-browser/releases/latest && wget "$(grep -rioh 'http.*apk' | grep '.*arm64.*')" && wget https://github.com/patrickfav/uber-apk-signer/releases/download/v1.2.1/uber-apk-signer-1.2.1.jar && mkdir -p iceraven && unzip *.apk -d iceraven && find . -iname "readerview" -execdir rm -rf {} \; ; cd iceraven && zip -1 -r iceraven.apk . && mv iceraven.apk .. && cd .. && java -jar uber-apk-signer-1.2.1.jar -a iceraven.apk
       - name: Release with Notes
         uses: softprops/action-gh-release@v1
         with:
